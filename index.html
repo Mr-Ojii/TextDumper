@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TextBitDumper</title>
+    <script src="https://unpkg.com/encoding-japanese@2.2.0/encoding.min.js"></script>
+    <script type="text/javascript">
+      function dump()
+      {
+        const str = document.getElementById("src").value;
+        const unicodeArray = Encoding.stringToCode(str);
+        const dstArray = Encoding.convert(unicodeArray, {
+          from: 'UNICODE',
+          to: document.getElementById("sel").value,
+        });
+
+        const del = document.getElementById("del").value;
+        let convArr;
+        switch(document.getElementById("bin").value) {
+          case "bin": convArr = toBinStringArr(dstArray); break;
+          case "oct": convArr = toOctStringArr(dstArray); break;
+          case "dec": convArr = toDecStringArr(dstArray); break;
+          case "hex": convArr = toHexStringArr(dstArray); break;
+        }
+        document.getElementById("dst").value = convArr.join(del);
+
+        const convArray = Encoding.convert(dstArray, {
+          from: document.getElementById("cvsel").value,
+          to: 'UNICODE',
+        });
+
+        document.getElementById("conv").value = Encoding.codeToString(convArray);
+      }
+      function toBinStringArr(byteArray) {
+        return Array.from(byteArray, function(byte) {
+          return ('0000000' + (byte & 0xFF).toString(2)).slice(-8);
+        });
+      }
+      function toOctStringArr(byteArray) {
+        return Array.from(byteArray, function(byte) {
+          return ('00' + (byte & 0xFF).toString(8)).slice(-3);
+        });
+      }
+      function toDecStringArr(byteArray) {
+        return Array.from(byteArray, function(byte) {
+          return ((byte & 0xFF).toString(10));
+        });
+      }
+      function toHexStringArr(byteArray) {
+        return Array.from(byteArray, function(byte) {
+          return ('0' + (byte & 0xFF).toString(16)).slice(-2).toUpperCase();
+        });
+      }
+      window.onload = () => {
+        const url = new URL(window.location.href);
+        document.getElementById("src").value = url.searchParams.get("str");
+        dump();
+      }
+    </script>
+  </head>
+  <body>
+    <h1>TextBitDumper</h1>
+    <p><textarea id="src" oninput="dump()" style="width: 90vw; height: 20vh;"></textarea></p>
+    <p>
+      <select id="sel" onchange="dump()">
+        <option value="SJIS">Shift_JIS</option>
+        <option value="UTF8" selected>UTF-8</option>
+        <option value="UTF16LE">UTF-16 LE</option>
+      </select>
+      <select id="bin" onchange="dump()">
+        <option value="bin">BIN</option>
+        <option value="oct">OCT</option>
+        <option value="dec">DEC</option>
+        <option value="hex" selected>HEX</option>
+      </select>
+      <select id="del" onchange="dump()">
+        <option value=",">Comma</option>
+        <option value=", " selected>CS</option>
+        <option value=" ">Space</option>
+        <option value="&#x0A;">LF</option>
+        <option value="" >None</option>
+      </select>
+    </p>
+    <p><textarea id="dst" readonly style="width: 90vw; height: 20vh;"></textarea></p>
+    <p><select id="cvsel" onchange="dump()">
+      <option value="SJIS" selected>Shift_JIS</option>
+      <option value="UTF8">UTF-8</option>
+      <option value="UTF16LE">UTF-16 LE</option>
+    </select></p>
+    <p><textarea id="conv" readonly style="width: 90vw; height: 20vh;"></textarea></p>
+  </body>
+</html>
