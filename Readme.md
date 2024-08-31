@@ -18,6 +18,10 @@
     * 8 (OCT)
     * 10 (DEC)
     * 16 (HEX)
+  + 接頭辞をつけることが可能
+    * 0b (2)
+    * 0  (8)
+    * 0x (16)
 - そのビット列を他の文字コードで解釈したものを出力
 - クエリパラメータ(str=???)で文字列を事前入力可能
   * [https://mr-ojii.github.io/TextBitDumper?str=こんにちは](https://mr-ojii.github.io/TextBitDumper?str=こんにちは)

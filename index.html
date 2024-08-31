@@ -13,14 +13,15 @@
           to: document.getElementById("sel").value,
         });
 
-        const del = document.getElementById("del").value;
+        const pre = document.getElementById("pre").checked;
         let convArr;
         switch(document.getElementById("bin").value) {
-          case "bin": convArr = toBinStringArr(dstArray); break;
-          case "oct": convArr = toOctStringArr(dstArray); break;
-          case "dec": convArr = toDecStringArr(dstArray); break;
-          case "hex": convArr = toHexStringArr(dstArray); break;
+          case "bin": convArr = toBinStringArr(dstArray, pre); break;
+          case "oct": convArr = toOctStringArr(dstArray, pre); break;
+          case "dec": convArr = toDecStringArr(dstArray, pre); break;
+          case "hex": convArr = toHexStringArr(dstArray, pre); break;
         }
+        const del = document.getElementById("del").value;
         document.getElementById("dst").value = convArr.join(del);
 
         const convArray = Encoding.convert(dstArray, {
@@ -30,24 +31,27 @@
 
         document.getElementById("conv").value = Encoding.codeToString(convArray);
       }
-      function toBinStringArr(byteArray) {
+      function toBinStringArr(byteArray, pre) {
+        let pretx = pre ? '0b' : '';
         return Array.from(byteArray, function(byte) {
-          return ('0000000' + (byte & 0xFF).toString(2)).slice(-8);
+          return pretx + ('0000000' + (byte & 0xFF).toString(2)).slice(-8);
         });
       }
-      function toOctStringArr(byteArray) {
+      function toOctStringArr(byteArray, pre) {
+        let pretx = pre ? '0' : '';
         return Array.from(byteArray, function(byte) {
-          return ('00' + (byte & 0xFF).toString(8)).slice(-3);
+          return pretx + ('00' + (byte & 0xFF).toString(8)).slice(-3);
         });
       }
-      function toDecStringArr(byteArray) {
+      function toDecStringArr(byteArray, pre) {
         return Array.from(byteArray, function(byte) {
           return ((byte & 0xFF).toString(10));
         });
       }
-      function toHexStringArr(byteArray) {
+      function toHexStringArr(byteArray, pre) {
+        let pretx = pre ? '0x' : '';
         return Array.from(byteArray, function(byte) {
-          return ('0' + (byte & 0xFF).toString(16)).slice(-2).toUpperCase();
+          return pretx + ('0' + (byte & 0xFF).toString(16)).slice(-2).toUpperCase();
         });
       }
       window.onload = () => {
@@ -79,6 +83,7 @@
         <option value="&#x0A;">LF</option>
         <option value="" >None</option>
       </select>
+      <input type="checkbox" id="pre" onchange="dump()" /><label for="pre">Prefix</label>
     </p>
     <p><textarea id="dst" readonly style="width: 90vw; height: 20vh;"></textarea></p>
     <p><select id="cvsel" onchange="dump()">
