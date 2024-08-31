@@ -38,7 +38,7 @@
         });
       }
       function toOctStringArr(byteArray, pre) {
-        let pretx = pre ? '0' : '';
+        let pretx = pre ? '0o' : '';
         return Array.from(byteArray, function(byte) {
           return pretx + ('00' + (byte & 0xFF).toString(8)).slice(-3);
         });
