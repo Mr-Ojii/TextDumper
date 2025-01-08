@@ -23,6 +23,7 @@
         }
         const del = document.getElementById("del").value;
         document.getElementById("dst").value = convArr.join(del);
+        document.getElementById("byteCount").innerHTML = String(dstArray.length) + " bytes";
 
         const convArray = Encoding.convert(dstArray, {
           from: document.getElementById("cvsel").value,
@@ -84,6 +85,7 @@
         <option value="" >None</option>
       </select>
       <input type="checkbox" id="pre" onchange="dump()" /><label for="pre">Prefix</label>
+      <p id="byteCount">0 bytes</p>
     </p>
     <p><textarea id="dst" readonly style="width: 90vw; height: 20vh;"></textarea></p>
     <p><select id="cvsel" onchange="dump()">
